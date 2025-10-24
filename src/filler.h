@@ -25,7 +25,7 @@ template <std::integral T> void random_array_fill(std::span<T> array, std::mt199
 		std::swap(min, max);
 	}
 
-#pragma omp parallel for shared(array, arr_size, dist) private(local_rand)
+#pragma omp parallel for shared(array, arr_size) private(local_rand)
 	for (std::size_t i = 0; i < arr_size; ++i) {
 		array[i] = std::uniform_int_distribution<T>{min, max}(local_rand);
 	}
