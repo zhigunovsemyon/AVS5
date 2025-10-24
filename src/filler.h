@@ -43,3 +43,13 @@ template <std::integral T> void random_array_fill(std::span<T> array, T min, T m
 		}
 	}
 }
+
+template <typename T> void linear_fill(std::span<T> array, T begin = 0)
+{
+	auto const arr_size = array.size();
+
+#pragma omp parallel for
+	for (std::size_t i = 0; i < arr_size; ++i) {
+		array[i] = begin + static_cast<T>(i);
+	}
+}
