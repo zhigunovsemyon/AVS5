@@ -1,7 +1,7 @@
 #pragma once
-#include <span>
-#include <random>
 #include <omp.h>
+#include <random>
+#include <span>
 
 template <std::floating_point T> void random_array_fill(std::span<T> array, std::mt19937_64 local_rand, T min, T max)
 {
@@ -10,11 +10,10 @@ template <std::floating_point T> void random_array_fill(std::span<T> array, std:
 	if (min > max) {
 		std::swap(min, max);
 	}
-	auto dist = std::uniform_real_distribution<T>(min, max);
 
-#pragma omp parallel for shared(array, arr_size, dist) private(local_rand)
+#pragma omp parallel for shared(array, arr_size) private(local_rand)
 	for (std::size_t i = 0; i < arr_size; ++i) {
-		array[i] = dist(local_rand);
+		array[i] = std::uniform_real_distribution<T>{min, max}(local_rand);
 	}
 }
 
@@ -25,10 +24,9 @@ template <std::integral T> void random_array_fill(std::span<T> array, std::mt199
 	if (min > max) {
 		std::swap(min, max);
 	}
-	auto dist = std::uniform_int_distribution<T>(min, max);
 
 #pragma omp parallel for shared(array, arr_size, dist) private(local_rand)
 	for (std::size_t i = 0; i < arr_size; ++i) {
-		array[i] = dist(local_rand);
+		array[i] = std::uniform_int_distribution<T>{min, max}(local_rand);
 	}
 }
