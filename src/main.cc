@@ -1,7 +1,7 @@
+#include "printer.h"
 #include <compare>
 #include <cstddef>
 #include <omp.h>
-#include <print>
 #include <random>
 #include <span>
 #include <utility>
@@ -42,22 +42,6 @@ template <std::integral T> void random_array_fill(std::span<T> array, T min, T m
 	for (std::size_t i = 0; i < arr_size; ++i) {
 		array[i] = dist(local_rand);
 	}
-}
-
-template <std::floating_point T> void print_array(std::span<T> const array)
-{
-	for (auto const & n : array) {
-		std::print("{:.5f}; ", n);
-	}
-	std::println();
-}
-
-template <std::integral T> void print_array(std::span<T> const array)
-{
-	for (auto const & n : array) {
-		std::print("{} ", n);
-	}
-	std::println();
 }
 
 int main()
