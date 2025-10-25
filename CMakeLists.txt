@@ -16,7 +16,8 @@ file(GLOB CXX_FILES "src/*.cc")
 find_package(OpenMP)
 
 if (WIN32)
-	add_definitions("/Wall /WX") 
+	add_definitions("/W4 /WX") #Wall цепляет ошибки из OpenMP
+	add_definitions("/openmp:llvm")
 else()
 	add_definitions("-Wall -Wextra -Werror -Wconversion -Wsign-conversion")
 endif(WIN32)
