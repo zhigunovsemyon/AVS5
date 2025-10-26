@@ -1,4 +1,6 @@
 #pragma once
+#include "printer.h"
+
 #include <algorithm>
 #include <cassert>
 #include <omp.h>
