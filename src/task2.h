@@ -1,10 +1,11 @@
 #pragma once
 #include "printer.h"
 
-#include <span>
 #include <algorithm>
 #include <print>
+#include <span>
 #include <vector>
+#include <omp.h>
 
 template <typename T, typename sorter> void mergesort(std::span<T> arr, std::span<T> buf, sorter sort_type)
 {
@@ -19,8 +20,14 @@ template <typename T, typename sorter> void mergesort(std::span<T> arr, std::spa
 	auto mid_point_buf = buf.begin() + buf.size() / 2;
 	std::span<T> lhs_buf{buf.begin(), mid_point_buf}, rhs_buf{mid_point_buf, buf.end()};
 
-	mergesort(lhs_arr, lhs_buf, sort_type);
-	mergesort(rhs_arr, rhs_buf, sort_type);
+#pragma omp parallel sections
+	{
+#pragma omp section
+		mergesort(lhs_arr, lhs_buf, sort_type);
+
+#pragma omp section
+		mergesort(rhs_arr, rhs_buf, sort_type);
+	}
 
 	std::copy(lhs_arr.begin(), lhs_arr.end(), lhs_buf.begin());
 	std::copy(rhs_arr.begin(), rhs_arr.end(), rhs_buf.begin());
@@ -34,7 +41,7 @@ template <typename T, typename sorter> void mergesort(std::span<T> arr, std::spa
 			continue;
 		}
 		if (j == rhs_buf.end()) {
-			it = *(i++);	
+			it = *(i++);
 			continue;
 		}
 
@@ -49,6 +56,7 @@ template <typename T, bool no_print = false, typename sorter> auto task2(std::sp
 	std::span<T> buf{mid_point, mid_point + arr.size()};
 	assert((buf.size() + arr.size()) <= big_arr.size());
 
+	omp_set_max_active_levels((int)ceil(log2(omp_get_max_threads()))); 
 	if (no_print) {
 		mergesort(arr, buf, sort_type);
 		return arr.size();
