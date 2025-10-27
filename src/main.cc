@@ -24,31 +24,45 @@ int main()
 	constexpr arr_type begin = 0;
 	constexpr arr_type end = 10;
 	constexpr bool disable_print = true;
-	constexpr std::size_t arr_size = 900;
+	constexpr std::size_t arr_size = 100'900;
 
 	std::vector<arr_type> nums(arr_size);
 
 	dt();
+	std::println("Заполнение массива на {} чисел", arr_size);
 	random_array_fill(std::span{nums}, begin, end);
-	std::println("Заполено {} числами за {:4f} секунд\n", arr_size, dt());
+	std::println("Заполено за {:f} сек\n", dt());
 
+	std::println("Cложение массивов C = A + B");
 	auto ret = task1<arr_type, disable_print>(std::span{nums});
-	std::println("Сложены массивы на {} чисел за {:4f} секунд\n", ret, dt());
+	std::println("Сложены массивы на {} чисел за {:f} сек\n", ret, dt());
 
+	std::println("Проход по несортированному массиву методом слияния");
 	ret = task2<arr_type, disable_print>(std::span{nums}, my_less);
-	std::println("Рассортирован слиянием массив на {} чисел за {:4f} секунд\n", ret, dt());
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
+	
+	std::println("Проход по отсортированному массиву методом слияния");
+	ret = task2<arr_type, disable_print>(std::span{nums}, my_less);
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
 
+	std::println("Проход по отсортированному наоборот массиву методом слияния");
 	ret = task2<arr_type, disable_print>(std::span{nums}, std::greater<arr_type>{});
-	std::println("Рассортирован слиянием массив в обратную сторону на {} чисел за {:4f} секунд\n", ret, dt());
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
 
 	random_array_fill(std::span{nums}, begin, end);
-	std::println("Заполено {} числами за {:4f} секунд\n", arr_size, dt());
+	std::println("Заполено {} числами за {:f} сек\n", arr_size, dt());
 	
+	std::println("Проход по несортированному массиву методом быстрой сортировки");
 	ret = task3<arr_type, disable_print>(std::span{nums}, my_less);
-	std::println("Быстрая сортировка массива на {} чисел за {:4f} секунд\n", ret, dt());
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
 
+	std::println("Проход по сортированному наоборот массиву методом быстрой сортировки");
 	ret = task3<arr_type, disable_print>(std::span{nums}, std::greater{});
-	std::println("Быстрая сортировка массива в обратную сторону на {} чисел за {:4f} секунд\n", ret, dt());
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
+	
+	std::println("Проход по сортированному массиву методом быстрой сортировки");
+	ret = task3<arr_type, disable_print>(std::span{nums}, std::greater{});
+	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
 	
 	return 0;
 }
