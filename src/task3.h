@@ -48,8 +48,16 @@ void quicksort(std::span<T> arr, sorter sort_type)
 	}
 	auto split_it = qsort_partition(arr, sort_type);
 
+#pragma omp parallel sections
+	{
+
+#pragma omp section
 	quicksort(std::span{split_it + 1, arr.end()}, sort_type);
+		
+#pragma omp section
 	quicksort(std::span{arr.begin(), split_it}, sort_type);
+
+	}
 }
 
 template <typename T, bool no_print = false, typename sorter> auto task3(std::span<T> arr, sorter sort_type)
