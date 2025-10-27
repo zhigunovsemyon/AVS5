@@ -12,13 +12,16 @@ endif()
 project ("AVS5" LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 file(GLOB CXX_FILES "src/*.cc")
+set(STACK_SIZE "10000000000000")
 
 find_package(OpenMP)
 
 if (WIN32)
 	add_definitions("/W4 /WX") #Wall цепляет ошибки из OpenMP
 	add_definitions("/openmp:llvm")
-else()
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:${STACK_SIZE}")
+else ()
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,${STACK_SIZE}")
 	add_definitions("-Wall -Wextra -Werror -Wconversion -Wsign-conversion")
 endif(WIN32)
 
