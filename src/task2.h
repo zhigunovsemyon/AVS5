@@ -2,6 +2,7 @@
 #include "printer.h"
 
 #include <algorithm>
+#include <cstdint>
 #include <print>
 #include <span>
 #include <vector>
@@ -53,7 +54,7 @@ template <typename T, bool no_print = false, typename sorter> auto task2(std::sp
 {
 	auto mid_point = big_arr.begin() + big_arr.size() / 2;
 	std::span<T> arr{big_arr.begin(), mid_point};
-	std::span<T> buf{mid_point, mid_point + arr.size()};
+	std::span<T> buf{mid_point, mid_point + (int64_t)arr.size()};
 	assert((buf.size() + arr.size()) <= big_arr.size());
 
 	omp_set_max_active_levels((int)ceil(log2(omp_get_max_threads()))); 

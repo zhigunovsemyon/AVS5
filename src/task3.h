@@ -8,9 +8,9 @@
 #include <cassert>
 #include <omp.h>
 
-template <typename T, typename sorter> auto qsort_key_pick(std::span<T> arr, sorter sort_type) 
+template <typename T, typename sorter> int64_t qsort_key_pick(std::span<T> arr, sorter sort_type) 
 {
-	return arr.size() / 2;
+	return (int64_t)arr.size() / 2;
 	(void)sort_type;
 }
 
@@ -20,7 +20,7 @@ auto qsort_partition(std::span<T> arr, sorter sort_type)
 	int64_t iend = (int64_t)arr.size() - 1;
 		
 	int64_t ikey = qsort_key_pick(arr, sort_type);
-	std::swap(arr[ikey], arr[iend]);
+	std::swap(arr[(size_t)ikey], arr[(size_t)iend]);
 	ikey = iend--;
 
 	int64_t j = -1;
@@ -28,14 +28,14 @@ auto qsort_partition(std::span<T> arr, sorter sort_type)
 	for (i = 0; i < ikey; ++i) {
 
 		//при проходе по большей половине всегда будет это
-		if (sort_type(arr[ikey], arr[i])) {
+		if (sort_type(arr[(size_t)ikey], arr[(size_t)i])) {
 			continue;
 		} 
 		//else:
-		std::swap(arr[++j], arr[i]);
+		std::swap(arr[(size_t)(++j)], arr[(size_t)i]);
 	}
 	// j сам перестанет расти, когда в оставшеёся половине все элементы будут больше
-	std::swap(arr[ikey], arr[j + 1]);
+	std::swap(arr[(size_t)ikey], arr[(size_t)j + 1]);
 		
 	return arr.begin() + (j + 1);
 }
