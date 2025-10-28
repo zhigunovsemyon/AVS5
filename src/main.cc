@@ -3,6 +3,7 @@
 #include "task2.h"
 #include "task3.h"
 
+#include <omp.h>
 #include <vector>
 
 template <class T>
@@ -20,13 +21,16 @@ static double dt()
 int main()
 {
 	auto my_less = [](auto a, auto b) { return a < b; };	
-	using arr_type = int;
+	using arr_type = double;
 	constexpr arr_type begin = 0;
 	constexpr arr_type end = 10;
 	constexpr bool disable_print = true;
-	constexpr std::size_t arr_size = 100'900;
+	constexpr std::size_t arr_size = 1'000'000'000;
 
 	std::vector<arr_type> nums(arr_size);
+
+	omp_set_num_threads(8);
+	omp_set_max_active_levels((int)ceil(log2(omp_get_max_threads())));
 
 	dt();
 	std::println("Заполнение массива на {} чисел", arr_size);
@@ -40,7 +44,7 @@ int main()
 	std::println("Проход по несортированному массиву методом слияния");
 	ret = task2<arr_type, disable_print>(std::span{nums}, my_less);
 	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());
-	
+
 	std::println("Проход по отсортированному массиву методом слияния");
 	ret = task2<arr_type, disable_print>(std::span{nums}, my_less);
 	std::println("Массив на {} чисел рассортирован за {:f} сек\n", ret, dt());

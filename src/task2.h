@@ -57,7 +57,6 @@ template <typename T, bool no_print = false, typename sorter> auto task2(std::sp
 	std::span<T> buf{mid_point, mid_point + (int64_t)arr.size()};
 	assert((buf.size() + arr.size()) <= big_arr.size());
 
-	omp_set_max_active_levels((int)ceil(log2(omp_get_max_threads()))); 
 	if (no_print) {
 		mergesort(arr, buf, sort_type);
 		return arr.size();
